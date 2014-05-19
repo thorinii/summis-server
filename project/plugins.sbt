@@ -20,3 +20,4 @@ resolvers += Classpaths.sbtPluginReleases
 
 addSbtPlugin("org.scoverage" %% "sbt-scoverage" % "0.99.3")
 
+addSbtPlugin("com.github.scct" %% "sbt-scct" % "0.2.1")

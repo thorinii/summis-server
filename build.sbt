@@ -24,4 +24,4 @@ resolvers ++= Seq("snapshots"     at "http://oss.sonatype.org/content/repositori
 scalacOptions += "-feature"
 
 
-instrumentSettings
+seq(ScctPlugin.instrumentSettings : _*)
