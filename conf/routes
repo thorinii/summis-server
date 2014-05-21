@@ -3,7 +3,9 @@
 # ~~~~
 
 
-GET     /                           me.lachlanap.summis.controllers.Main.home()
+GET     /                           me.lachlanap.summis.controllers.Main.index()
+GET     /user/login                 me.lachlanap.summis.controllers.User.loginPage()
+POST    /user/login                 me.lachlanap.summis.controllers.User.login()
 
 
 # Map static resources from the /public folder to the /assets URL path

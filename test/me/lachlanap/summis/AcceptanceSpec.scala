@@ -1,3 +1,6 @@
+package me.lachlanap.summis
+
+import org.specs2.matcher._
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
@@ -16,7 +19,25 @@ class AcceptanceSpec extends Specification {
     "show a home page" in new WithBrowser {
       browser.goTo("http://localhost:" + port)
 
-      browser.pageSource must contain("logged out")
+      browser.pageSource.toLowerCase must contain("not logged in")
+    }
+  }
+
+  "the login page" should {
+    "login an admin" in new WithRunner {
+      runner.mustBeLoggedOut
+
+      runner.login
+
+      runner.mustBeLoggedIn
+    }
+
+    "refuse anyone else" in new WithRunner {
+      runner.mustBeLoggedOut
+
+      runner.login("bad username", "bad password")
+
+      runner.mustBeLoggedOut
     }
   }
 }

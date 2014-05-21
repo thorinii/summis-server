@@ -1,0 +1,15 @@
+@(user: Option[String], appVersion: String, loginForm: Form[me.lachlanap.summis.controllers.LoginFormData])
+@base("Login - Summis Server", user, appVersion) {
+  <form class="form-signin" role="form" method="POST" action="/user/login">
+    <h2 class="form-signin-heading">Please login</h2>
+
+    @helper.input(loginForm("username")) { (id, name, value, args) =>
+      <input type="text" class="form-control" name="@name" id="@id" placeholder="Username" @toHtmlArgs(args) required autofocus>
+    }
+    @helper.input(loginForm("password")) { (id, name, value, args) =>
+      <input type="password" class="form-control" name="@name" id="@id" placeholder="Password" @toHtmlArgs(args) required>
+    }
+
+    <button id="login-submit" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+}

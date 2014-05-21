@@ -4,7 +4,9 @@ import play.api._
 import play.api.mvc._
 
 object Main extends Controller {
-  def home() = Action {
-    Ok("You are logged out.")
+  def index() = Action { implicit request =>
+    val version = Play.current.configuration.getString("application.version").getOrElse("dev build")
+
+    Ok(me.lachlanap.summis.views.html.index(session.get("logged-in"), version))
   }
 }
