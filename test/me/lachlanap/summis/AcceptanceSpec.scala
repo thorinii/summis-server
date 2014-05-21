@@ -17,6 +17,9 @@ class AcceptanceSpec extends Specification {
 
   "the application" should {
     "show a home page" in new WithBrowser {
+      import org.openqa.selenium.htmlunit.HtmlUnitDriver
+      browser.getDriver().asInstanceOf[HtmlUnitDriver].setJavascriptEnabled(false)
+
       browser.goTo("http://localhost:" + port)
 
       browser.pageSource.toLowerCase must contain("not logged in")
