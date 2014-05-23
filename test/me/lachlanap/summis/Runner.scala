@@ -9,6 +9,7 @@ import play.api.test._
 import play.api.test.Helpers._
 
 class Runner(browser: TestBrowser, port: Int) extends MustThrownMatchers {
+  // Disable javascript
   browser.getDriver().asInstanceOf[HtmlUnitDriver].setJavascriptEnabled(false)
 
   // Start out at the home page
