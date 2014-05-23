@@ -9,11 +9,11 @@ import play.api.mvc._
 case class LoginFormData(username: String, password: String)
 
 object User extends Controller {
-  lazy val version = Play.current.configuration.getString("application.version").getOrElse("dev build")
-
   def validate(username: String, password: String) = {
-    // TODO: check matches admin logins
-    Some(LoginFormData(username, password))
+    if(Global.auth.isValidLogin(username, password))
+      Some(LoginFormData(username, password))
+    else
+      None
   }
 
   val loginForm = Form(
@@ -29,14 +29,14 @@ object User extends Controller {
     session.get("logged-in").map { username =>
       Redirect(routes.Main.index())
     }.getOrElse {
-      Ok(me.lachlanap.summis.views.html.login(None, version, loginForm))
+      Ok(me.lachlanap.summis.views.html.login(None, Global.config.version, loginForm))
     }
   }
 
   def login() = Action { implicit request =>
     loginForm.bindFromRequest.fold(
       formWithErrors => {
-        BadRequest(me.lachlanap.summis.views.html.login(None, version, formWithErrors))
+        BadRequest(me.lachlanap.summis.views.html.login(None, Global.config.version, formWithErrors))
       }, loginFormData => {
         Redirect(routes.Main.index()).withSession("logged-in" -> loginFormData.username)
       }
