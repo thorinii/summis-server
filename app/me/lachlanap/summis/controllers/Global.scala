@@ -22,6 +22,4 @@ object Global {
   }
 }
 
-case class Config(
-  version: String
-)
+case class Config(version: String)
