@@ -43,4 +43,14 @@ class AcceptanceSpec extends Specification {
       runner.mustNotBeLoggedIn
     }
   }
+
+  "the logout page" should {
+    "logout an admin" in new WithRunner {
+      runner.login
+
+      runner.logout
+
+      runner.mustNotBeLoggedIn
+    }.pendingUntilFixed
+  }
 }

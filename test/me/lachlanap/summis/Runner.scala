@@ -36,6 +36,10 @@ class Runner(browser: TestBrowser, port: Int) extends MustThrownMatchers {
 
     browser.$("#login-submit").click()
   }
+
+  def logout: Unit = {
+    browser.$("#logout").click()
+  }
 }
 
 abstract class WithRunner extends WithBrowser {
