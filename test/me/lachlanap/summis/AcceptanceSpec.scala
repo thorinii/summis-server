@@ -28,7 +28,7 @@ class AcceptanceSpec extends Specification {
 
   "the login page" should {
     "login an admin" in new WithRunner {
-      runner.mustBeLoggedOut
+      runner.mustNotBeLoggedIn
 
       runner.login
 
@@ -36,11 +36,11 @@ class AcceptanceSpec extends Specification {
     }
 
     "refuse anyone else" in new WithRunner {
-      runner.mustBeLoggedOut
+      runner.mustNotBeLoggedIn
 
       runner.login("bad username", "bad password")
 
-      runner.mustBeLoggedOut
+      runner.mustNotBeLoggedIn
     }
   }
 }

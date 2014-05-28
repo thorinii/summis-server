@@ -17,7 +17,7 @@ class Runner(browser: TestBrowser, port: Int) extends MustThrownMatchers {
 
   def goto(url: String) = browser.goTo("http://localhost:" + port + url)
 
-  def mustBeLoggedOut = {
+  def mustNotBeLoggedIn = {
     browser.pageSource.toLowerCase must contain("not logged in")
   }
   def mustBeLoggedIn = {
