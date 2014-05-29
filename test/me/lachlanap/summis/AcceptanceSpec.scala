@@ -51,6 +51,6 @@ class AcceptanceSpec extends Specification {
       runner.logout
 
       runner.mustNotBeLoggedIn
-    }.pendingUntilFixed
+    }
   }
 }

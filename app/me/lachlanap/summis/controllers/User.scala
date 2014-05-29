@@ -42,4 +42,8 @@ object User extends Controller {
       }
     )
   }
+
+  def logout() = Action { implicit request =>
+    Redirect(routes.Main.index()).withNewSession
+  }
 }
