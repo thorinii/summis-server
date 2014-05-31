@@ -6,12 +6,6 @@ trait AccountRepository {
   def getAccountForName(username: String): Option[Account]
 }
 
-trait AuthProvider {
-  def isLoggedIn: Boolean
-  def currentUser: Option[String]
-}
-
-
 class Auth(repository: AccountRepository) {
   def isValidLogin(username: String, password: String) = {
     repository.getAccountForName(username)
