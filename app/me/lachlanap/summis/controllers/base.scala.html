@@ -1,4 +1,4 @@
-@(title: String, user: Option[String], appVersion: String)(content: Html)
+@(context: me.lachlanap.summis.controllers.Context, title: String)(content: Html)
 <!DOCTYPE html>
 <head>
   <title>@title</title>
@@ -54,9 +54,9 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-          @if(user.isDefined) {
-            <li><a>Logged in as @user.get</a></li>
-          } else {
+          @context.loggedInAccount.map { account =>
+            <li><a>Logged in as @account.username</a></li>
+          } getOrElse {
             <li><a>Not logged in</a></li>
           }
           <li><a id="logout" href="/user/logout">Logout</a></li>
@@ -71,7 +71,7 @@
     <hr>
 
     <footer>
-      <p>Summis Server @appVersion | &copy; Lachlan Phillips 2014</p>
+      <p>Summis Server @context.appVersion | &copy; Lachlan Phillips 2014</p>
     </footer>
   </div>
 </body>

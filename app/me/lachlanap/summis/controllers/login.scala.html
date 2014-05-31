@@ -1,5 +1,5 @@
-@(user: Option[String], appVersion: String, loginForm: Form[me.lachlanap.summis.controllers.LoginFormData])
-@base("Login - Summis Server", user, appVersion) {
+@(context: me.lachlanap.summis.controllers.Context, loginForm: Form[me.lachlanap.summis.controllers.LoginFormData])
+@base(context, "Login - Summis Server") {
   <form class="form-signin" role="form" method="POST" action="/user/login">
     <h2 class="form-signin-heading">Please login</h2>
 

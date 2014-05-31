@@ -8,15 +8,15 @@ import play.api.mvc._
 
 case class LoginFormData(username: String, password: String)
 
-object User extends Controller {
-  def validate(username: String, password: String) = {
+object User extends AbstractController {
+  private def validate(username: String, password: String) = {
     if(Global.auth.isValidLogin(username, password))
       Some(LoginFormData(username, password))
     else
       None
   }
 
-  val loginForm = Form(
+  private val loginForm = Form(
     mapping(
       "username" -> text,
       "password" -> text
@@ -25,25 +25,25 @@ object User extends Controller {
     })
   )
 
-  def loginPage() = Action { implicit request =>
-    session.get("logged-in").map { username =>
+  def loginPage = ContextedAction { context =>
+    context.loggedInAccount.map { _ =>
       Redirect(routes.Main.index())
     }.getOrElse {
-      Ok(me.lachlanap.summis.views.html.login(None, Global.config.version, loginForm))
+      Ok(me.lachlanap.summis.controllers.html.login(context, loginForm))
     }
   }
 
-  def login() = Action { implicit request =>
-    loginForm.bindFromRequest.fold(
+  def login = ContextedAction { context =>
+    loginForm.bindFromRequest()(context.request).fold(
       formWithErrors => {
-        BadRequest(me.lachlanap.summis.views.html.login(None, Global.config.version, formWithErrors))
+        BadRequest(me.lachlanap.summis.controllers.html.login(context, formWithErrors))
       }, loginFormData => {
-        Redirect(routes.Main.index()).withSession("logged-in" -> loginFormData.username)
+        Redirect(routes.Main.index()).withSession(context.login(loginFormData.username).session)
       }
     )
   }
 
-  def logout() = Action { implicit request =>
-    Redirect(routes.Main.index()).withNewSession
+  def logout = ContextedAction { context =>
+    Redirect(routes.Main.index()).withSession(context.logout.session)
   }
 }
