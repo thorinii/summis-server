@@ -32,5 +32,6 @@ case class Context(request: Request[_],
 case class Menu(items: Seq[MenuItem])
 
 case class MenuItem(url: String, name: String, active: Boolean = false) {
+  def id = name.toLowerCase.replaceAll(" ", "-")
   def toActive = MenuItem(url, name, true)
 }

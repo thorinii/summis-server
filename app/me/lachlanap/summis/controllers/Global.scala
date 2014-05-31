@@ -34,21 +34,29 @@ object Global {
 
   def contextFor(request: Request[_]) = {
     val currentPath = request.path
-    val menu = buildMenu.map(item => if(item.url == currentPath) item.toActive else item)
 
     val loggedInAccount = request.session.get("user").flatMap { auth.getAccountForName(_) }
+
+    val menu = instantiateMenu(siteMenu, currentPath, loggedInAccount.isDefined)
 
     Context(request,
             config.version,
             loggedInAccount,
-            currentPath, Menu(menu),
+            currentPath, menu,
             request.session)
   }
 
-  private def buildMenu = {
-    List(MenuItem("/", "Home"),
-         MenuItem("/user/login", "Login"),
-         MenuItem("/user/logout", "Logout"))
+  private def instantiateMenu(menu: Menu, url: String, isLoggedIn: Boolean) = {
+    Menu(menu.items
+             .filterNot(item => item.url.contains("login") && isLoggedIn)
+             .filterNot(item => item.url.contains("logout") && !isLoggedIn)
+             .map(item => if(item.url == url) item.toActive else item))
+  }
+
+  private lazy val siteMenu = {
+    Menu(List(MenuItem("/", "Home"),
+              MenuItem("/user/login", "Login"),
+              MenuItem("/user/logout", "Logout")))
   }
 }
 
