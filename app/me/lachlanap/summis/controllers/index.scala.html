@@ -1,3 +1,24 @@
-@(context: me.lachlanap.summis.controllers.Context)
+@(context: summis.controllers.Context, projects: Seq[(Project, Option[Release])])
 @base(context, "") {
+  <table id="projects" class="table">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Latest Stable Release</td>
+      </tr>
+    </thead>
+
+    <tbody>
+      @projects.map { case (project, latestOpt) =>
+        <tr>
+          <td><a href="@context.url(project)">@project.name</a></td>
+          @latestOpt.map { latest =>
+            <td><a href="@context.url(latest)">@latest.version</a></td>
+          }.getOrElse {
+            <td>-</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
 }

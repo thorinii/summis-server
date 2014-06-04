@@ -27,6 +27,14 @@ case class Context(request: Request[_],
             url, menu,
             session - "user")
   }
+
+  def url(project: Project) = {
+    routes.ProjectController.info(project.slug)
+  }
+
+  def url(release: Release) = {
+    "TODO"
+  }
 }
 
 case class Menu(items: Seq[MenuItem])

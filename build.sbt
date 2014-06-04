@@ -31,3 +31,10 @@ scoverage.ScoverageSbtPlugin.instrumentSettings
 
 
 seq(ScctPlugin.instrumentSettings : _*)
+
+
+
+templatesImport ++= Seq(
+  "me.lachlanap._",
+  "me.lachlanap.summis.logic._"
+)

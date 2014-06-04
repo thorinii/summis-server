@@ -24,29 +24,40 @@ class AcceptanceSpec extends Specification {
 
   "the login page" should {
     "login an admin" in new WithRunner {
-      runner.mustNotBeLoggedIn
+      ui.mustNotBeLoggedIn
 
-      runner.login
+      ui.login()
 
-      runner.mustBeLoggedIn
+      ui.mustBeLoggedIn
     }
 
     "refuse anyone else" in new WithRunner {
-      runner.mustNotBeLoggedIn
+      ui.mustNotBeLoggedIn
 
-      runner.login("bad username", "bad password")
+      ui.login("bad username", "bad password")
 
-      runner.mustNotBeLoggedIn
+      ui.mustNotBeLoggedIn
     }
   }
 
   "the logout page" should {
     "logout an admin" in new WithRunner {
-      runner.login
+      ui.login()
 
-      runner.logout
+      ui.logout
 
-      runner.mustNotBeLoggedIn
+      ui.mustNotBeLoggedIn
     }
+  }
+
+  "creating a project" should {
+    "show it on the home page" in new WithRunner {
+      ui.login()
+
+      val projectName = builders.makeProjectName
+      ui.createProject(projectName)
+
+      ui.mustShowProjectOnHomePage(projectName)
+    }.pendingUntilFixed
   }
 }

@@ -8,6 +8,8 @@ GET     /user/login                 me.lachlanap.summis.controllers.User.loginPa
 POST    /user/login                 me.lachlanap.summis.controllers.User.login()
 GET     /user/logout                me.lachlanap.summis.controllers.User.logout()
 
+GET     /project/:name              me.lachlanap.summis.controllers.ProjectController.info(name: String)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
