@@ -19,23 +19,15 @@ class ConfiguredAccountRepository(config: Configuration) extends AccountReposito
 }
 
 object Global {
-  var _config: Option[Config] = None
-  var _auth: Option[Auth] = None
-  var _projects: Option[ProjectService] = None
+  private var _g: Option[Global] = None
+  private def g = _g.get
 
-  def config = _config.get
-  def auth = _auth.get
-  def projects = _projects.get
+  def config = g.config
+  def auth = g.auth
+  def projects = g.projects
 
   def init(app: Application) = {
-    val version = app.configuration.getString("application.version").getOrElse("dev build")
-
-    _config = Some(Config(version))
-
-    _auth = Some(new Auth(new ConfiguredAccountRepository(app.configuration)))
-
-    val projectRepository = new DBProjectRepository(app)
-    _projects = Some(new ProjectService(projectRepository))
+    _g = Some(new Global(app))
   }
 
   def contextFor(request: Request[_]) = {
@@ -65,6 +57,14 @@ object Global {
               MenuItem(routes.User.login.url, "Login"),
               MenuItem(routes.User.logout.url, "Logout", auth=true)))
   }
+}
+
+class Global(app: Application) {
+  private val version = app.configuration.getString("application.version").getOrElse("dev build")
+
+  val config = Config(version)
+  val auth = new Auth(new ConfiguredAccountRepository(app.configuration))
+  val projects = new ProjectService(new DBProjectRepository(app))
 }
 
 case class Config(version: String)
