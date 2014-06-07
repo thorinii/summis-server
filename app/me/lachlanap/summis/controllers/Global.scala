@@ -64,7 +64,9 @@ class Global(app: Application) {
 
   val config = Config(version)
   val auth = new Auth(new ConfiguredAccountRepository(app.configuration))
-  val projects = new ProjectService(new DBProjectRepository(app))
+  
+  private val db = new Database(app)
+  val projects = new ProjectService(new DBProjectRepository(db))
 }
 
 case class Config(version: String)

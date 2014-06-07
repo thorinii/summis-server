@@ -17,14 +17,14 @@ class ProjectServiceSpec extends Specification with Mockito {
 
       sut.create("A Project")
 
-      there was one(repo).create(Project("a-project", "A Project"))
+      there was one(repo).create(Project(UnsetId, "a-project", "A Project"))
     }
 
     "retrieve a project" in {
       val repo = mock[ProjectRepository]
       val sut = new ProjectService(repo)
 
-      repo.getBySlug("a-project") returns Some(Project("a-project", "A Project"))
+      repo.getBySlug("a-project") returns Some(Project(UnsetId, "a-project", "A Project"))
 
       val result = sut.getBySlug("a-project")
 
@@ -46,7 +46,7 @@ class ProjectServiceSpec extends Specification with Mockito {
   }
 
   private def aProjectWithReleasesWithLatest = {
-    val project = Project("a-project", "A Project")
+    val project = Project(UnsetId, "a-project", "A Project")
     val latest = Release(project, "0.1.4")
 
     val releases = List(Release(project, "0.1.2"), latest, Release(project, "0.1.1"))

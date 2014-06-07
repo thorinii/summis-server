@@ -1,6 +1,11 @@
 package me.lachlanap.summis.logic
 
-case class Project(slug: String, name: String)
+sealed trait Id
+case class LongId(id: Long) extends Id
+case object UnsetId extends Id
+
+
+case class Project(id: Id, slug: String, name: String)
 
 case class Release(project: Project, version: String)
 

@@ -3,21 +3,29 @@ package me.lachlanap.summis.database
 import me.lachlanap.summis.logic._
 
 import anorm._
+import anorm.SqlParser._
 import play.api._
-import play.api.db.DB
 
-class DBProjectRepository(app: Application) extends ProjectRepository {
-  var projects = List.empty[Project]
-
-  def create(project: Project) = {
-    projects = project :: projects
+class DBProjectRepository(db: Database) extends ProjectRepository {
+  def create(project: Project) = db.execute { implicit c =>
+    SQL("INSERT INTO project(slug, name) VALUES ({slug}, {name})")
+       .on('slug -> project.slug, 'name -> project.name)
+       .executeInsert()
   }
 
   def getBySlug(slug: String) = None
 
-  def getAllProjectsWithReleases = projects.map { p => (p, List.empty[Release]) }
+  private val project = {
+    get[Long]("id") ~
+    get[String]("slug") ~
+    get[String]("name") map {
+      case id~slug~name => Project(LongId(id), slug, name)
+    }
+  }
 
-
-  import java.sql.Connection
-  private def withDB[A](block: Connection => A) = DB.withConnection(block)(app)
+  def getAllProjectsWithReleases = db.execute { implicit c =>
+    SQL("SELECT id, slug, name FROM project").as(project.*)
+                                             .map(p => (p, List.empty[Release]))
+                                             .toList
+  }
 }

@@ -9,7 +9,7 @@ trait ProjectRepository {
 
 class ProjectService(repo: ProjectRepository) {
   def create(name: String) = {
-    val project = Project(slugFor(name), name)
+    val project = Project(UnsetId, slugFor(name), name)
     repo.create(project)
   }
 
