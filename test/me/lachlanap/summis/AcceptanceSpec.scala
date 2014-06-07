@@ -58,6 +58,6 @@ class AcceptanceSpec extends Specification {
       ui.createProject(projectName)
 
       ui.mustShowProjectOnHomePage(projectName)
-    }//.pendingUntilFixed
+    }
   }
 }
