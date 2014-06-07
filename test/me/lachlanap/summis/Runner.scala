@@ -40,7 +40,11 @@ class UIRunner(browser: TestBrowser, port: Int) extends MustThrownMatchers {
   }
 
   def createProject(name: String) = {
+    browser.$("#create-project").click()
 
+    browser.$("#name").text(name)
+
+    browser.$("#submit").click()
   }
 
   def mustShowProjectOnHomePage(name: String) = {
@@ -52,7 +56,7 @@ class UIRunner(browser: TestBrowser, port: Int) extends MustThrownMatchers {
   }
 }
 
-class Builders {
+object Builders {
   val projectNames = List("Ubuntu", "Debian", "Windows", "Play", "Chrome", "Specs2")
 
   private def choose[T](from: Seq[T]) = projectNames((Math.random() * from.size).toInt)
@@ -62,8 +66,20 @@ class Builders {
 }
 
 abstract class WithRunner extends WithBrowser {
+  import org.specs2.execute._
+
   lazy val ui = new UIRunner(browser, port)
-  lazy val builders = new Builders
+  lazy val builders = Builders
+
+  override def around[T: AsResult](t: => T): Result = {
+    try {
+      Helpers.running(TestServer(port, app))(AsResult.effectively(t))
+    } catch {
+      case e: Exception => throw e
+    } finally {
+      browser.quit()
+    }
+  }
 }
 
 object HtmlMatchers {

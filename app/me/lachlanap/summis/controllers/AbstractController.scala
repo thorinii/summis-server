@@ -9,4 +9,11 @@ trait AbstractController extends Controller {
 
     result(context)
   }
+
+  def LoggedInAction(result: Context => Result) = ContextedAction { context =>
+    if(context.loggedInAccount.isDefined)
+      result(context)
+    else
+      Redirect(routes.User.loginPage())
+  }
 }

@@ -16,7 +16,7 @@ object User extends AbstractController {
       None
   }
 
-  private val loginForm = Form(
+  val loginForm = Form(
     mapping(
       "username" -> text,
       "password" -> text

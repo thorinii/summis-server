@@ -1,0 +1,12 @@
+@(context: summis.controllers.Context, createProjectForm: Form[summis.controllers.CreateProjectFormData])
+@base(context, "Create Project") {
+  @helper.form(action = summis.controllers.routes.ProjectController.create) {
+    <h2 class="form-heading">Create a new project</h2>
+
+    @helper.input(createProjectForm("name")) { (id, name, value, args) =>
+      <input type="text" class="form-control" name="@name" id="@id" placeholder="Project Name" @toHtmlArgs(args) required autofocus>
+    }
+
+    <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+  }
+}
